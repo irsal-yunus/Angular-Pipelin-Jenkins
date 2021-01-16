@@ -11,7 +11,7 @@ node('master'){
   }
 
   stage('Build') {
-    sh 'npm install'
+    bat 'npm install'
   }
   
   if(env.BRANCH_NAME.startsWith('feature/') || env.BRANCH_NAME.startsWith('bugfix/')) {
@@ -23,14 +23,14 @@ node('master'){
   if(env.BRANCH_NAME == 'develop') {
     stage('Deploy to Dev') {
       withCredentials([usernamePassword(credentialsId: 'derek_pcf', passwordVariable: 'CF_PW', usernameVariable: 'CF_USER')]) {
-        sh 'cf login -a api.run.pivotal.io -u $CF_USER -p $CF_PW -o pipeline_demos -s development'
-        sh 'cf push -f config/dev/manifest.yml'
+        bat 'cf login -a api.run.pivotal.io -u $CF_USER -p $CF_PW -o pipeline_demos -s development'
+        bat 'cf push -f config/dev/manifest.yml'
       }
     }
 
     stage('E2E Tests') {
       withCredentials([usernamePassword(credentialsId: 'derek_sauce_key', passwordVariable: 'SAUCE_ACCESS_KEY', usernameVariable: 'SAUCE_USERNAME')]) {
-        sh 'npm run protractor'
+        bat 'npm run protractor'
       }
     }
   }
@@ -38,8 +38,8 @@ node('master'){
   if(env.BRANCH_NAME.startsWith('release/') || env.BRANCH_NAME.startsWith('hotfix/')) {
     stage('Deploy to Prod') {
       withCredentials([usernamePassword(credentialsId: 'derek_pcf', passwordVariable: 'CF_PW', usernameVariable: 'CF_USER')]) {
-        sh 'cf login -a api.run.pivotal.io -u $CF_USER -p $CF_PW -o pipeline_demos -s production'
-        sh 'cf push -f config/prod/manifest.yml'
+        bat 'cf login -a api.run.pivotal.io -u $CF_USER -p $CF_PW -o pipeline_demos -s production'
+        bat 'cf push -f config/prod/manifest.yml'
       }
     }
   }
