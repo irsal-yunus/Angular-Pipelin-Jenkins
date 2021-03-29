@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 
+@Library('shared-library@master')
+
 node('master'){
   def branch = "${env.BRANCH_NAME}"
 
