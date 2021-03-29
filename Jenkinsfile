@@ -2,7 +2,7 @@
 
 @Library('shared-library@master')
 
-node('master'){
+node('main'){
   def branch = "${env.BRANCH_NAME}"
 
   echo branch
